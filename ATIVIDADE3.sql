@@ -4,17 +4,32 @@
 /*QUESTÃO 1*/
 
 DELIMITER $$
-CREATE PROCEDURE insere_aluno(IN cod_curso INTEGER,IN dat_nasc DATE,IN tot_cred INTEGER,IN mgp DOUBLE,IN nom_alun VARCHAR(60),IN email VARCHAR(30)) 
- BEGIN
-	INSERT INTO aluno (cod_curso, dat_nasc, tot_cred, mgp, nom_alun, email)
-    values (cod_curso, dat_nasc, tot_cred, mgp, nom_alun, email);
-    if row_count() = 1 then
-    select nom_alun from aluno;
-    end if;
- END $$
- DELIMITER ;
+CREATE FUNCTION cadastroAluno(cod_curso INT, 
+	dat_nasc DATE, 
+    tot_cred INT, 
+    mgp DOUBLE(10,2), 
+    nom_alun VARCHAR(60), 
+    email VARCHAR(30))
+RETURNS VARCHAR(60)
+DETERMINISTIC
+BEGIN
+	INSERT INTO aluno(cod_curso,
+		dat_nasc, 
+        tot_cred, 
+        mgp, 
+        nom_alun, 
+        email) VALUES(cod_curso,
+		dat_nasc, 
+        tot_cred, 
+        mgp, 
+        nom_alun, 
+        email);
+	RETURN nom_alun;
+END$$
+DELIMITER ;
+
+SELECT cadastroAluno(Null, '1998-06-7', 60, 8, 'thiago', 'thiagotw10@hotmail.com') AS Nome_do_Aluno;
  
- call insere_aluno(5, '2000-10-5', 60, 8.75, 'thiago', 'thiagotw10@hotmail.com');
 
 /*FIM DA QUESTÃO 1*/
 
